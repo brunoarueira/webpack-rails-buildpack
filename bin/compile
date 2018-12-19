@@ -53,7 +53,7 @@ gem which bundler >/dev/null 2>&1 || gem install bundler --no-document -v '~> 1.
 echo "-----> bundle install"
 bundle install -j4 --deployment | indent
 
-echo "-----> " detect_package_manager " install"
+echo "-----> $(detect_package_manager) install"
 
 if $YARN; then
   yarn install
