@@ -14,6 +14,10 @@ env_dir=$3
 
 cd $build_dir
 
+indent() {
+  sed -u 's/^/       /'
+}
+
 if [ -f "$build_dir/yarn.lock" ]; then
   YARN=true
 else
@@ -44,10 +48,10 @@ export_env_dir() {
 export_env_dir
 
 echo "-----> gem install bundler (if missing)"
-gem which bundler >/dev/null 2>&1 || gem install bundler --no-document -v '~> 1.17' --force
+gem which bundler >/dev/null 2>&1 || gem install bundler --no-document -v '~> 1.17' --force | indent
 
 echo "-----> bundle install"
-bundle install -j4 --deployment
+bundle install -j4 --deployment | indent
 
 echo "-----> " detect_package_manager " install"
 
@@ -55,12 +59,12 @@ if $YARN; then
   yarn install
 else
   npm install
-fi
+fi | indent
 
 echo "-----> bundle exec rake webpack:compile"
-bundle exec rake webpack:compile
+bundle exec rake webpack:compile | indent
 
 if ! $YARN; then
   echo "-----> npm prune"
-  npm prune
+  npm prune | indent
 fi
